@@ -216,7 +216,7 @@ for (i=2;i&lt;=4;i++)
 
 //Actions after standard output
 switch actp
-{   case "berserker":   if skill and !burst
+{   case "berserker":   if skill and !burst//Enrage
                         {   skill--;
                             burst = room_speed*10;
                             buff_a += 0.1;
@@ -233,7 +233,7 @@ switch actp
                             agility += (0.8+courage*0.2) * (buff_s+rage+1.0);
                         }
                         break;
-    case "twin":        if skill
+    case "twin":        if skill//Slash
                         {   skill--;
                             rage = 9;
                             buff_a += 5;
@@ -242,7 +242,7 @@ switch actp
                             attack[0] = (0.5+courage*0.5) * (buff_a+1.1);
                         }
                         break;
-    case "hammer":      if skill and (target!=noone)
+    case "hammer":      if skill and (target!=noone)//Smash
                         {   skill--;
                             attack[0] *= 20;
                             hp_gain += !!modifier[1] * attack[0]*5;
@@ -250,7 +250,7 @@ switch actp
                             ds_list_add(target.all_damage,attack);
                         }
                         break;
-    case "s_earth1":    skill--;
+    case "s_earth1":    skill--;//Meteor
                         ammo--;
                         attack[0] = attack[0]*60 + irandom_range(-10,10)*!!attack[0];
                         hp_gain += !!modifier[1] * attack[0]*5;
@@ -258,22 +258,22 @@ switch actp
                         ds_list_add(target.all_damage,attack);
                         target = noone;
                         break;
-    case "s_earth2":    skill--;
+    case "s_earth2":    skill--;//Bodyarmor
                         ammo--;
                         target.shield[2] = room_speed*60;
                         target = noone;
                         break;
-    case "s_earth3":    skill--;
+    case "s_earth3":    skill--;//Money
                         ammo--;
                         target.modifier[2] = room_speed*15;
                         target = noone;
                         break;
-    case "s_air1":      skill--;
+    case "s_air1":      skill--;//Barrier
                         ammo--;
                         target.shield[1] = room_speed*30;
                         target = noone;
                         break;
-    case "s_air3":      skill--;
+    case "s_air3":      skill--;//Purge
                         ammo--;
                         attack[0] *= 5;
                         attack[4] = 1;
@@ -282,7 +282,7 @@ switch actp
                         ds_list_add(target.all_damage,attack);
                         target = noone;
                         break;
-    case "s_water1":    skill--;
+    case "s_water1":    skill--;//Freeze
                         ammo--;
                         attack[0] *= 20;
                         attack[2] = 1;
@@ -291,12 +291,12 @@ switch actp
                         ds_list_add(target.all_damage,attack);
                         target = noone;
                         break;
-    case "s_water2":    skill--;
+    case "s_water2":    skill--;//Lifesteal
                         ammo--;
                         target.modifier[1] = room_speed*15;
                         target = noone;
                         break;
-    case "s_water3":    skill--;
+    case "s_water3":    skill--;//Soullink
                         ammo--;
                         i = (target&gt;&gt;20)&amp;1048575;
                         target = target&amp;1048575;
@@ -305,12 +305,12 @@ switch actp
                         ds_list_add(target.shield[3],j);
                         target = noone;
                         break;
-    case "s_fire1":     skill--;
+    case "s_fire1":     skill--;//Flame
                         ammo--;
                         target.modifier[0] = room_speed*5;
                         target = noone;
                         break;
-    case "s_fire2":     skill--;
+    case "s_fire2":     skill--;//Lightning
                         ammo--;
                         attack[0] *= 10;
                         attack[3] = 1;
@@ -329,7 +329,7 @@ switch actp
                             ds_list_add(get_random[|i].all_damage,k);
                         }
                         break;
-    case "s_fire3":     skill--;
+    case "s_fire3":     skill--;//Nuke
                         ammo--;
                         attack[0] *= 200;
                         var get_random = ds_list_create();
@@ -433,7 +433,7 @@ if ready
                         ds_list_add(get_random,card_wizard.mercs[#i,j]);
             ds_list_add(get_random[|irandom(ds_list_size(get_random)-1)].all_damage,attack);
             ds_list_add(target.all_damage,attack);
-            attack[0] *= 2;
+            k = attack[0]*2;
         }
         else if class == "gun"
         {   for (i=3;i&lt;=4;i++)
@@ -443,22 +443,25 @@ if ready
             attack[0] *= (0.8+0.2*ds_list_size(get_random)) / ds_list_size(get_random);
             for (i=0;i&lt;ds_list_size(get_random);i++)
                 ds_list_add(get_random[|i].all_damage,attack);
-            attack[0] *= ds_list_size(get_random);
+            k = attack[0]*ds_list_size(get_random);
             if skill and (random(1)&gt;=power(0.92,skill))
-            {   card_wizard.scrap += 40 * ceil(attack[0]);
-                skill--;
+            {   skill--;
+                card_wizard.scrap += 40 * ceil(k);
             }
         }
         else if (class="cannon") and skill and (random(1)&gt;=power(0.98,skill))
-        {   attack[0] *= 30;
+        {   skill--;
+            attack[0] *= 30;
             ds_list_add(target.all_damage,attack);
-            skill--;
+            k = attack[0];
         }
         else
-            ds_list_add(target.all_damage,attack);
+        {   ds_list_add(target.all_damage,attack);
+            k = attack[0];
+        }
         
-        hp_gain += !!modifier[1] * attack[0]*5;
-        blood_gain += !!modifier[2] * attack[0]*50;
+        hp_gain += !!modifier[1] * k*5;
+        blood_gain += !!modifier[2] * k*50;
         ds_list_destroy(get_random);
     }
 }
@@ -498,6 +501,7 @@ else
 }
 
 //Gains and life output
+//MAY WANT TO CHANGE VARIABLE NAME FROM BLOOD TO MONEY
 if hp_gain &gt;= 100
 {   hp += hp_gain div 100;
     hp_gain %= 100;

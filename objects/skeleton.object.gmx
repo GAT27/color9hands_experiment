@@ -127,7 +127,7 @@ else
 hp -= !!debuff[0]*(1+card_wizard.progress)/room_speed;
 for (i=0;i&lt;=3;i++)
     debuff[i] = max(debuff[i]-1,0);
-if damage[0] and !debuff[3]
+if (damage[0]+0.5) and !debuff[3]
 {   hp -= damage[0];
     if damage[1]
         debuff[0] = room_speed*5;//burn
