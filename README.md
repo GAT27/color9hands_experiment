@@ -3,7 +3,7 @@
 An RPG/Tactics/Card game developed for mobile devices.
 **IT IS HIGHLY RECOMMEND TO READ THROUGH ENTIRELY, AS THERE IS NO TUTORIAL IN GAME.**
 Early alpha demo for [Android](https://github.com/GAT27/color9hands_experiment/blob/master/Experiment_9Hand-Default-1.0.0.apk?raw=true)
-and [Windows](https://github.com/GAT27/color9hands_experiment/blob/master/Experiment_9Hand-Default-1.0.0.exe) available.
+and [Windows](https://github.com/GAT27/color9hands_experiment/blob/master/Experiment_9Hand-Default-1.0.0.exe?raw=true) available.
 Note that there are no animations or effects yet.
 
 #Gameplay:
